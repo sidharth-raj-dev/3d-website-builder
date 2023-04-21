@@ -1,8 +1,10 @@
 import * as THREE from 'three';
-import { createMachine, interpret, assign } from 'xstate';
+import { createMachine } from 'xstate';
+import { interpret } from 'xstate/lib/interpreter';
+import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFze4PK4ArgG0ADAF1EoZo1jZu2LtJAAPRACYAHGIoBmAJxiAbBoCsAGhABPTTopmte5y9d6Avu6toseQiXIKTh4wVX5BIQIWNkh6dBo5QmDeMIE2UUkVWXlFZSQ1O11DE3MrWwRDPQoDAEZjeobG4w8vEB8cfGIySmTQ8PSo1nwIKloGbFJZACd+PQgBRggwGnEpfOyFJVwVdQQAdg0yxD0zKr2zT28MDv9uoK4U-uFBmJHqOnolul4COYWv1ZZOSbPKgXZ7AAsFA0Yj0NVKNk0ZmMDkubWufi6gTwm1QNGwAC88FBPlxKHgAG6MADW5NwuPxBLAAFpYOgYoD1sDctt8rs9BCDBQamIDHpzkcEDVDNCLq12piAnSGYTifQwFMpowphRmDRUNwAGba0hUemKPGEllsjmZLk5LY7Y6C4Wi8WWREIWoUc6eVq4RZwFQKzpKoEO0EFBDMjQQyXM4xokO3bFjcMg3lgxCnIViCHGLQSz3aGoUMRONxuJMY0N3XqpCIvYbpnlOhCxyV1AzV3y1wL1p6RaLDUZ0FuOvmIEVmYUGU7wj3lCHIns3LHKi2M4njyO7CGHT1aUtyq69lOUDVaqY7zNR05aH1HhHlIw+uWeIA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFze4PK4ArgG0ADAF1EoZo1jZu2LtJAAPRACYAHGIoBmAJxiAbBoCsAGhABPTTopmte5y9d6Avu6toseQiXIqWgZYblQAJ35UXGxSVEUucSkkEFl5BNwVdQQzAHZcigMARgAWDQNjYyMSkoMrWwQSot0mgzNjXLFcswNu4xLPbwwcfGIySk4eMFV+QSECFjZIenQaOUJJ3hmBNlFJFTSFJUyU7O1dQxNzesRDPUKiyqfnyo8vEB8R-3GKTenZ3YLVj4CBBOj0WKySIEPQQASMCBgGhJA5yI7KU6IXIaG4IPRme7dQYfYZ+MaBP7bOZApag6jgxF0XgwuGkBFIlEpQ4ZLJYkoUDRiPRFa42TTtBzEz5kgKUPBHVA0bAALzwUHoEC4ctwADdGABrbUKpXKsAAWlg6CWnJkaJ5mLxtQozQMem6uKKhgFZilpNGsqoMUUipVavoYHC4UY4QozBo8QAZtHSIHjSrzZbrfsuXbjrzHQZnWJXe6xQhihQie9pf6ftFYvEw6EWAR63EMjbUrmMaBsoYigKykU2jpR7k6mWzEUzA4ilois03bl8VpPO9cOz4Cka99yKj0nmHWaNCVcWbjBQxFexNO9BpcsOisu3kNfLXAvSwPv0Sde4gCfcWgaMY87FloVQ9HouLmAUYhOHe+QlEBjjGL6b67hMXBbACwg0iC372n+CAnh6IGFAYFFaCUHTnEBuRoV85KYVMVKAosIJgl+OYHj2aiIM0M7DgSIqWGWJTtAxMo-PKwYmmqBGHkRZS4vOkrVn6GEUBGUbhApvHZASWiVvOooNEYlY+up6FMRQbaNrgUB6b+fE5OOzrGAScHLmY7T9LiZgmIUxhXtOjzYsFuQDGuQA */
     id: "Machine Name",
     initial: "initializing",
     states: {
@@ -11,8 +13,13 @@ const editorMachine = createMachine({
                 "open content menu": {
                     target: "context menu opened",
                 },
+
+                "start animation": "animating"
             },
+
+            entry: "makeACube"
         },
+
         "context menu opened": {
             initial: "idle",
             states: {
@@ -37,6 +44,7 @@ const editorMachine = createMachine({
                 },
             },
         },
+
         initializing: {
             invoke: {
                 src: "initializeScene",
@@ -54,15 +62,25 @@ const editorMachine = createMachine({
                 ],
             },
         },
+
         error: {
             entry: "setError"
         },
+
+        animating: {
+            on: {
+                "stop animation": "idle"
+            },
+
+            entry: "startAnimation"
+        }
     },
     context: {
         scene: null,
         camera: null,
         renderer: null,
-        error: ''
+        error: '',
+        objectsInScene: []
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -79,7 +97,30 @@ const editorMachine = createMachine({
                 ...context,
                 error: event.data
             }
-        })
+        }),
+        makeACube: assign((context, event) => {
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const cube = new THREE.Mesh(geometry, material);
+            context.scene.add(cube);
+
+            return {
+                ...context,
+                cube: cube
+            }
+        }),
+        startAnimation: (context, event) => {
+            function animate() {
+                requestAnimationFrame(animate);
+
+                context.cube.rotation.x += 0.01;
+                context.cube.rotation.y += 0.01;
+
+                context.renderer.render(context.scene, context.camera);
+            }
+
+            animate();
+        }
     },
     services: {
         initializeScene: async (context, event) => {
@@ -88,13 +129,7 @@ const editorMachine = createMachine({
             const renderer = new THREE.WebGLRenderer();
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
-
-            function animate() {
-                requestAnimationFrame(animate);
-                renderer.render(scene, camera);
-            }
-
-            animate();
+            camera.position.z = 5;
 
             return {
                 ...context,
@@ -102,15 +137,26 @@ const editorMachine = createMachine({
                 camera,
                 renderer
             };
-
-
         }
     }
 });
 
-const editorService = interpret(editorMachine).onTransition((state) => {
-    console.log(state.value);
-    console.log(state.context);
-});
+let editorService;
 
-editorService.start();
+try {
+    editorService = interpret(editorMachine).onTransition((state) => {
+        console.log(state.value);
+        console.log(state.context);
+    });
+} catch (error) {
+    console.error('Error interpreting editor machine:', error);
+}
+
+if (editorService) {
+    editorService.start();
+}
+
+
+document.getElementById('start').addEventListener('click', () => {
+    editorService.send('start animation');
+});
