@@ -4,24 +4,25 @@ import { interpret } from 'xstate/lib/interpreter';
 import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFze4PK4ArgG0ADAF1EoZo1jZu2LtJAAPRACYAHGIoBmAJxiAbBoCsAGhABPTTopmte5y9d6Avu6toseQiXIqWgZYblQAJ35UXGxSVEUucSkkEFl5BNwVdQQzAHZcigMARgAWDQNjYyMSkoMrWwQSot0mgzNjXLFcswNu4xLPbwwcfGIySk4eMFV+QSECFjZIenQaOUJJ3hmBNlFJFTSFJUyU7O1dQxNzesRDPUKiyqfnyo8vEB8R-3GKTenZ3YLVj4CBBOj0WKySIEPQQASMCBgGhJA5yI7KU6IXIaG4IPRme7dQYfYZ+MaBP7bOZApag6jgxF0XgwuGkBFIlEpQ4ZLJYkoUDRiPRFa42TTtBzEz5kgKUPBHVA0bAALzwUHoEC4ctwADdGABrbUKpXKsAAWlg6CWnJkaJ5mLxtQozQMem6uKKhgFZilpNGsqoMUUipVavoYHC4UY4QozBo8QAZtHSIHjSrzZbrfsuXbjrzHQZnWJXe6xQhihQie9pf6ftFYvEw6EWAR63EMjbUrmMaBsoYigKykU2jpR7k6mWzEUzA4ilois03bl8VpPO9cOz4Cka99yKj0nmHWaNCVcWbjBQxFexNO9BpcsOisu3kNfLXAvSwPv0Sde4gCfcWgaMY87FloVQ9HouLmAUYhOHe+QlEBjjGL6b67hMXBbACwg0iC372n+CAnh6IGFAYFFaCUHTnEBuRoV85KYVMVKAosIJgl+OYHj2aiIM0M7DgSIqWGWJTtAxMo-PKwYmmqBGHkRZS4vOkrVn6GEUBGUbhApvHZASWiVvOooNEYlY+up6FMRQbaNrgUB6b+fE5OOzrGAScHLmY7T9LiZgmIUxhXtOjzYsFuQDGuQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFze4PK4ArgG0ADAF1EoZo1jZu2LtJAAPRACYAHGIoBmAJxiAbBoCsAGhABPTTopmte5y9d6Avu6toseQiXIqWgZYblQAJ35UXGxSVEUucSkkEFl5BNwVdQQzAHZcigMARgAWDQNjYyMSkoMrWwQSot0mgzNjXLFcswNu4xLPbwwcfGIySk4eMFV+QSECFjZIenQaOUJJ3hmBNlFJFTSFJUyU7O1dQxNzesRDPUKiyqfnyo8vEB8R-3GKTenZ3YLVj4CBBOj0WKySIEPQQASMCBgGhJA5yI7KU6IYwUDSPPRaMxFIrFDTaEq5G6NIpaCglPS5UlFcptcoaQYfYZ+MaBP7bOZApag6jgxF0XgwuGkBFIlEpQ4ZLKIGmtQliIkkskUmy3XEUakM3HMsys9mfLkBSh4I6oGjYABeeCg9AgXEtuAAbowANZu622u1gAC0sHQS1lMjRCsxCD0tT1YgM9Ms2oQRUMOLMps5owtVBiiht9sd9DA4XCjHCFGYNHiADMK6Q8377UGQ2H9nLI8dFTG481E91KcUKN0s74cz9orF4sXQiwCFO4hlw6kuxjQNlDEUcWViY4xDotLk6inCWYHNSiWJ6bk9I5PO9cNL4CkzRPyKj0t3o4GtAYR04xilFoh75EUyYNIG2JiDBaolMY14lAmRT5GOXzcpawSfuiJwbogZjOBQWgaMYWj9loVQ9HolLmAUB7OBo+QlMRjjGGh5o-LyALCAKILYVGeEIIGTQAXoQHMaBuTgZS1LYqRUltMRJhSWYmbvG+3w8lwWzcfMiwgmCYD8d+gnpk0jy9EBGoEpSxq6PJjJGuUbxDOOmm+gW-qOsZ65qIgZSUmRDjse+lCluW4Q+bhfk5PiAFMhBiBGCOamuehuaLjOuBQFFPZ5P+jwEQet6qZUJS2SYhQIWqhIdCRXQDA+QA */
     id: "Machine Name",
     initial: "initializing",
     states: {
         idle: {
             on: {
-                "open content menu": {
+                "open context menu": {
                     target: "context menu opened",
                 },
 
                 "start animation": "animating"
             },
 
-            entry: "makeACube"
+            entry: ["makeACube"]
         },
 
         "context menu opened": {
             initial: "idle",
+
             states: {
                 idle: {
                     on: {
@@ -38,11 +39,15 @@ const editorMachine = createMachine({
                     },
                 },
             },
+
             on: {
                 "close context menu": {
                     target: "idle",
+                    actions: "hideContextMenu"
                 },
             },
+
+            entry: "showContextMenu"
         },
 
         initializing: {
@@ -61,6 +66,8 @@ const editorMachine = createMachine({
                     },
                 ],
             },
+
+            entry: "createContextMenu"
         },
 
         error: {
@@ -120,6 +127,22 @@ const editorMachine = createMachine({
             }
 
             animate();
+        },
+        createContextMenu: (context, event) => {
+            const contextMenu = document.createElement('div');
+            contextMenu.id = 'context-menu';
+            contextMenu.style.display = 'none';
+            document.body.appendChild(contextMenu);
+        },
+        showContextMenu: (context, event) => {
+            const customMenu = document.getElementById('context-menu');
+            customMenu.style.display = 'block';
+            customMenu.style.left = event.payload.x + 'px';
+            customMenu.style.top = event.payload.y + 'px';
+        },
+        hideContextMenu: (context, event) => {
+            const customMenu = document.getElementById('context-menu');
+            customMenu.style.display = 'none';
         }
     },
     services: {
@@ -160,3 +183,23 @@ if (editorService) {
 document.getElementById('start').addEventListener('click', () => {
     editorService.send('start animation');
 });
+
+// open context menu on right click
+document.body.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+    editorService.send({
+        type: 'open context menu',
+        payload: {
+            x: event.clientX,
+            y: event.clientY
+        }
+    });
+    return false;
+});
+
+// close context menu on left click
+document.body.addEventListener('click', (event) => {
+    event.preventDefault();
+    editorService.send('close context menu');
+});
+
