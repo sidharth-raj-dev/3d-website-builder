@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from 'react';
+import ActionContext from './ActionContext.js';
 
-function Button() {
+function Button({ onClick }) {
+    const globalServices = useContext(ActionContext);
     return (
-        <button id="start">Start</button>
+        <button id="start" onClick={() => globalServices.send('start animation')}>Start</button>
     )
 }
 
