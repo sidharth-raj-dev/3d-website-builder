@@ -132,6 +132,7 @@ const editorMachine = createMachine({
             const contextMenu = document.createElement('div');
             contextMenu.id = 'context-menu';
             contextMenu.style.display = 'none';
+            contextMenu.innerHTML = "<button> Make a cube </button>";
             document.body.appendChild(contextMenu);
         },
         showContextMenu: (context, event) => {
