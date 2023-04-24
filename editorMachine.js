@@ -3,7 +3,7 @@ import { createMachine } from 'xstate';
 import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USEGZqhQtBTtTpuhJ9NVDZ1mVpWd4TE0tK0dTobQLZvaqBllM63R76GBkslGMkKMwaNkAGad0j10NuyPR2NnVUJq4a5NtU0SXxsnSMmqeKsA2210HpTLZFuJFgEXdZEpxwrTwmgcqPVPl0mBe5PvTtI0Vao6Cg6oxUiRsvQmDoRihACuBKvABRbiC5B4sUM5JhGRi+J4pj2LURjPnoH6MhGn6+Ph+FWP+5ZtNY1aRNusRSmAsEEtc16IDoZgUO4P6LgEQSMroBjGGYFheHY9jkcCQoLFwhwrCc4qwrRiYMQgEbdChpboZh2FvumHz2EY5plrSRh1Lym41tBYlLKKUkbLC8I0VOcFXi4bzId0ZK+HoaH6j4jJWr02nmpy+FWkuwl2qCjqNmGHqyfB8l1IyP5fiFlGUG2HbJNFDnlExLJ6D+Lxvs065JaZFAnvuuBQBl9GORUL6mvYTHGABOg6I0VjeRIHgNBIEgfmS7L2MMEwgUAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USEGZqhQtBTtTpuhJ9NVDZ1mVpWd4TE0tK0dTobQLZvaqBllM63R76GBkslGMkKMwaNkAGad0j10NuyPR2NnVUJq4a5NtU0SXxsnSMmqeKsA2210HpTLZFuJFgEXdZEpxwrTwmgcqPVPl0mBe5PvTtI0Vao6Cg6oxUiRsvQmDoRihACuBKvABRbiC5B4sUM5JhGRi+J4pj2LURjPnoH6MhGHgSPhf6LkBQF-g01aRNusRSmAsEEtc16IDoZgUO4P6LgEQSMroBjGGYFheHY9jkcCQoLFwhwrCc4qwrRiYMQgEbdChpboZh2FvumHz2EY7LdP09hMUYEybjW0FiUsopSRssLwjRU5wVeLhvMh3Rkr4ehofqPiMlavTaeanK+NyS7CXaoKOo2YYerJ8HyXUjI-l+oWUZQbYdskMWOeUhkoZyK5vs067JWZFAnvuuBQJl9FORUL6mgZJjGABOg6I0Vg+RIHgNPhH5kuy9jDMZoRAA */
     id: "Machine Name",
     initial: "initializing",
     states: {
@@ -69,7 +69,10 @@ const editorMachine = createMachine({
 
         animating: {
             on: {
-                "stop animation": "idle"
+                "stop animation": {
+                    target: "idle",
+                    actions: "setAnimatingToFalse"
+                }
             },
 
             entry: "startAnimation"
@@ -82,7 +85,8 @@ const editorMachine = createMachine({
         error: '',
         objectsInScene: [],
         x: 0,
-        y: 0
+        y: 0,
+        animating: true,
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -119,14 +123,25 @@ const editorMachine = createMachine({
                 cube: cube
             }
         }),
+        setAnimatingToFalse: assign((context, event) => {
+            // create the scene from start
+
+            return {
+                ...context,
+                animating: false
+            }
+        }),
         startAnimation: (context, event) => {
             function animate() {
-                requestAnimationFrame(animate);
+                if (context.animating) {
+                    console.log('animating');
+                    requestAnimationFrame(animate);
 
-                context.cube.rotation.x += 0.01;
-                context.cube.rotation.y += 0.01;
+                    context.cube.rotation.x += 0.01;
+                    context.cube.rotation.y += 0.01;
 
-                context.renderer.render(context.scene, context.camera);
+                    context.renderer.render(context.scene, context.camera);
+                }
             }
 
             animate();

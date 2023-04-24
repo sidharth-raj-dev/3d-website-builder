@@ -1,8 +1,6 @@
 import React from 'react'
 
 function ContextMenu({ open, x, y }) {
-    console.log(x);
-    console.log(y);
     return (
         <div id="context-menu"
             style={{
@@ -11,7 +9,9 @@ function ContextMenu({ open, x, y }) {
                 top: y + 'px'
             }}
         >
-            ContextMenu
+            <button>
+                Add a Cube
+            </button>
         </div>
     )
 }
