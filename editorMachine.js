@@ -3,7 +3,7 @@ import { createMachine } from 'xstate';
 import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USEGZqhQtBTtTpuhJ9NVDZ1mVpWd4TE0tK0dTobQLZvaqBllM63R76GBkslGMkKMwaNkAGad0j10NuyPR2NnVUJq4a5NtU0SXxsnSMmqeKsA2210HpTLZFuJFgEXdZEpxwrTwmgcqPVPl0mBe5PvTtI0Vao6Cg6oxUiRsvQmDoRihACuBKvABRbiC5B4sUM5JhGRi+J4pj2LURjPnoH6MhGHgSPhEhkjUbKLvYOrVpE26xFKYCwQS1zXogOhmBQ7g-ouARBIyugGMYZgWF4dj2BRwJCgsXCHCsJzirCdGJoxCARt0KGluhmHYW+6YfPYRjsi0FJAdqEybjW0HiUsorSRssLwrRU5wVeLhvMh3REXoaH6j4jJWr0OnmpyvjckuIl2qCjqNmGHpyfBCl1IyP5fiFVGUG2HbJNFjnlMxLJ6D+Lxvs065JWZFAnvuuBQBlDFORUL6mmRJjGABOg6I0VjeRIHgNPhH5kuy9jDMZoRAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USEGZqhQtBTtTpuhJ9NVDZ1mVpWd4TE0tK0dTobQLZvaqBllM63R76GBkslGMkKMwaNkAGad0j10NuyPR2NnVUJq4a5NtU0SXxsnSMmqeKsA2210HpTLZFuJFgEXdZEpxwrTwmgcqPVPl0mBe5PvTtI0Vao6Cg6oxUiRsvQmDoRihACuBKvABRbiC5B4sUM5JhGRi+J4pj2LURjPnoH6MhGn6+Ph+FWP+5ZtNY1aRNusRSmAsEEtc16IDoZgUO4P6LgEQSMroBjGGYFheHY9jkcCQoLFwhwrCc4qwrRiYMQgEbdChpboZh2FvumHz2EY5plrSRh1Lym41tBYlLKKUkbLC8I0VOcFXi4bzId0ZK+HoaH6j4jJWr02nmpy+FWkuwl2qCjqNmGHqyfB8l1IyP5fiFlGUG2HbJNFDnlExLJ6D+Lxvs065JaZFAnvuuBQBl9GORUL6mvYTHGABOg6I0VjeRIHgNBIEgfmS7L2MMEwgUAA */
     id: "Machine Name",
     initial: "initializing",
     states: {
@@ -11,6 +11,7 @@ const editorMachine = createMachine({
             on: {
                 "open context menu": {
                     target: "context menu opened",
+                    actions: "setPositionOfContextMenu"
                 },
 
                 "start animation": "animating"
@@ -79,7 +80,9 @@ const editorMachine = createMachine({
         camera: null,
         renderer: null,
         error: '',
-        objectsInScene: []
+        objectsInScene: [],
+        x: 0,
+        y: 0
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -95,6 +98,14 @@ const editorMachine = createMachine({
             return {
                 ...context,
                 error: event.data
+            }
+        }),
+        setPositionOfContextMenu: assign((context, event) => {
+            console.log(event.clientX);
+            return {
+                ...context,
+                x: event.payload.x,
+                y: event.payload.y
             }
         }),
         makeACube: assign((context, event) => {

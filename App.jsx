@@ -30,8 +30,14 @@ function App() {
 
     return (
         <div>
-            <Button onClick={() => editorService.send('start animation')} />
-            <ContextMenu open={current.matches('context menu opened')} />
+            <Button
+                onClick={() => editorService.send('start animation')}
+            />
+            <ContextMenu
+                open={current.matches('context menu opened')}
+                x={current.context.x}
+                y={current.context.y}
+            />
         </div>
     )
 }
