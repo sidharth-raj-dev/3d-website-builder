@@ -3,7 +3,7 @@ import { createMachine } from 'xstate';
 import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFze4PK4ArgG0ADAF1EoZo1jZu2LtJAAPRACYAHGIoBmAJxiAbBoCsAGhABPTTopmte5y9d6Avu6toseQiXIqWgZYblQAJ35UXGxSVEUucSkkEFl5BNwVdQQzAHZcigMARgAWDQNjYyMSkoMrWwQSot0mgzNjXLFcswNu4xLPbwwcfGIySk4eMFV+QSECFjZIenQaOUJJ3hmBNlFJFTSFJUyU7O1dQxNzesRDPUKiyqfnyo8vEB8R-3GKTenZ3YLVj4CBBOj0WKySIEPQQASMCBgGhJA5yI7KU6IYwUDSPPRaMxFIrFDTaEq5G6NIpaCglPS5UlFcptcoaQYfYZ+MaBP7bOZApag6jgxF0XgwuGkBFIlEpQ4ZLKIGmtQliIkkskUmy3XEUakM3HMsys9mfLkBSh4I6oGjYABeeCg9AgXEtuAAbowANZu622u1gAC0sHQS1lMjRCsxCD0tT1YgM9Ms2oQRUMOLMps5owtVBiiht9sd9DA4XCjHCFGYNHiADMK6Q8377UGQ2H9nLI8dFTG481E91KcUKN0s74cz9orF4sXQiwCFO4hlw6kuxjQNlDEUcWViY4xDotLk6inCWYHNSiWJ6bk9I5PO9cNL4CkzRPyKj0t3o4GtAYR04xilFoh75EUyYNIG2JiDBaolMY14lAmRT5GOXzcpawSfuiJwbogZjOBQWgaMYWj9loVQ9HolLmAUB7OBo+QlMRjjGGh5o-LyALCAKILYVGeEIIGTQAXoQHMaBuTgZS1LYqRUltMRJhSWYmbvG+3w8lwWzcfMiwgmCYD8d+gnpk0jy9EBGoEpSxq6PJjJGuUbxDOOmm+gW-qOsZ65qIgZSUmRDjse+lCluW4Q+bhfk5PiAFMhBiBGCOamuehuaLjOuBQFFPZ5P+jwEQet6qZUJS2SYhQIWqhIdCRXQDA+QA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USEGZqhQtBTtTpuhJ9NVDZ1mVpWd4TE0tK0dTobQLZvaqBllM63R76GBkslGMkKMwaNkAGad0j10NuyPR2NnVUJq4a5NtU0SXxsnSMmqeKsA2210HpTLZFuJFgEXdZEpxwrTwmgcqPVPl0mBe5PvTtI0Vao6Cg6oxUiRsvQmDoRihACuBKvABRbiC5B4sUM5JhGRi+J4pj2LURjPnoH6MhGHgSPhEhkjUbKLvYOrVpE26xFKYCwQS1zXogOhmBQ7g-ouARBIyugGMYZgWF4dj2BRwJCgsXCHCsJzirCdGJoxCARt0KGluhmHYW+6YfPYRjsi0FJAdqEybjW0HiUsorSRssLwrRU5wVeLhvMh3REXoaH6j4jJWr0OnmpyvjckuIl2qCjqNmGHpyfBCl1IyP5fiFVGUG2HbJNFjnlMxLJ6D+Lxvs065JWZFAnvuuBQBlDFORUL6mmRJjGABOg6I0VjeRIHgNPhH5kuy9jDMZoRAA */
     id: "Machine Name",
     initial: "initializing",
     states: {
@@ -16,7 +16,7 @@ const editorMachine = createMachine({
                 "start animation": "animating"
             },
 
-            entry: ["makeACube"]
+            entry: ["makeACube", "showGlimpse"]
         },
 
         "context menu opened": {
@@ -40,13 +40,8 @@ const editorMachine = createMachine({
             },
 
             on: {
-                "close context menu": {
-                    target: "idle",
-                    actions: "hideContextMenu"
-                },
-            },
-
-            entry: "showContextMenu"
+                "close context menu": "idle",
+            }
         },
 
         initializing: {
@@ -64,9 +59,7 @@ const editorMachine = createMachine({
                         target: "error",
                     },
                 ],
-            },
-
-            entry: "createContextMenu"
+            }
         },
 
         error: {
@@ -127,22 +120,8 @@ const editorMachine = createMachine({
 
             animate();
         },
-        createContextMenu: (context, event) => {
-            const contextMenu = document.createElement('div');
-            contextMenu.id = 'context-menu';
-            contextMenu.style.display = 'none';
-            contextMenu.innerHTML = "<button> Make a cube </button>";
-            document.body.appendChild(contextMenu);
-        },
-        showContextMenu: (context, event) => {
-            const customMenu = document.getElementById('context-menu');
-            customMenu.style.display = 'block';
-            customMenu.style.left = event.payload.x + 'px';
-            customMenu.style.top = event.payload.y + 'px';
-        },
-        hideContextMenu: (context, event) => {
-            const customMenu = document.getElementById('context-menu');
-            customMenu.style.display = 'none';
+        showGlimpse: (context, event) => {
+            context.renderer.render(context.scene, context.camera);
         }
     },
     services: {
