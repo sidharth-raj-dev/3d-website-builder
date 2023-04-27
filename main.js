@@ -117,8 +117,15 @@ const editorMachine = createMachine({
             }
         }),
         startAnimation: (context, event) => {
+            let animationIsPlaying = true;
+            document.getElementById('stop').addEventListener('click', () => {
+                animationIsPlaying = !animationIsPlaying;
+            });
+
             function animate() {
-                requestAnimationFrame(animate);
+                if (animationIsPlaying) {
+                    requestAnimationFrame(animate);
+                }
 
                 context.cube.rotation.x += 0.01;
                 context.cube.rotation.y += 0.01;
