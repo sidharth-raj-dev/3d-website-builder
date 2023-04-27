@@ -4,7 +4,7 @@ import { interpret } from 'xstate/lib/interpreter';
 import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFze4PK4ArgG0ADAF1EoZo1jZu2LtJAAPRACYAHGIoBmAJxiAbBoCsAGhABPTTopmte5y9d6Avu6toseQiXIqWgZYblQAJ35UXGxSVEUucSkkEFl5BNwVdQQzAHZcigMARgAWDQNjYyMSkoMrWwQSot0mgzNjXLFcswNu4xLPbwwcfGIySk4eMFV+QSECFjZIenQaOUJJ3hmBNlFJFTSFJUyU7O1dQxNzesRDPUKiyqfnyo8vEB8R-3GKTenZ3YLVj4CBBOj0WKySIEPQQASMCBgGhJA5yI7KU6IYwUDSPPRaMxFIrFDTaEq5G6NIpaCglPS5UlFcptcoaQYfYZ+MaBP7bOZApag6jgxF0XgwuGkBFIlEpQ4ZLKIGmtQliIkkskUmy3XEUakM3HMsys9mfLkBSh4I6oGjYABeeCg9AgXEtuAAbowANZu622u1gAC0sHQS1lMjRCsxCD0tT1YgM9Ms2oQRUMOLMps5owtVBiiht9sd9DA4XCjHCFGYNHiADMK6Q8377UGQ2H9nLI8dFTG481E91KcUKN0s74cz9orF4sXQiwCFO4hlw6kuxjQNlDEUcWViY4xDotLk6inCWYHNSiWJ6bk9I5PO9cNL4CkzRPyKj0t3o4GtAYR04xilFoh75EUyYNIG2JiDBaolMY14lAmRT5GOXzcpawSfuiJwbogZjOBQWgaMYWj9loVQ9HolLmAUB7OBo+QlMRjjGGh5o-LyALCAKILYVGeEIIGTQAXoQHMaBuTgZS1LYqRUltMRJhSWYmbvG+3w8lwWzcfMiwgmCYD8d+gnpk0jy9EBGoEpSxq6PJjJGuUbxDOOmm+gW-qOsZ65qIgZSUmRDjse+lCluW4Q+bhfk5PiAFMhBiBGCOamuehuaLjOuBQFFPZ5P+jwEQet6qZUJS2SYhQIWqhIdCRXQDA+QA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USECY2qaJL42TpGdVHhRdDaBbN7VQMspnW6PfQwMlkoxkhRmDRsgAzOukEuht2R6Oxs6qhNXDXJ1M9DMjRk1Tw6AuRIug9KZbKVxIsAgLrIlOOFAeE0DlR7VPN1bX3U96dpGirVHQUHVGKkSNl6Ew6IyhAG4JXwAq2ufkPHFIOSYRkYvieKY9i1EYZ56NejIRjevhIf4eg+JY3RaI8M7AkKDrxABBLXHuiA6GYFDuPe6YBEEjK6AYxhmBYXh2PY2F2qCIorCc4qwgRibEQgEbdOBJiQTYMFwZezIePYRjslaz5aMMj7-FMs4gsKXCHFxUIbLC8JgHxQECbm3Rkr4eiQfqPiMlavSyeanJIVaGZsX+IZlmGHpGbuLiIHUjL3rebkaZQ1a1skPlEX5FQUuBnJZpezRTiFuEUOuS64FAUVDvoYFkqRxjPjoOiNFYtkSB4DQSBI15kuy9jDBM75AA */
     id: "Machine Name",
     initial: "initializing",
     states: {
@@ -76,10 +76,13 @@ const editorMachine = createMachine({
 
         animating: {
             on: {
-                "stop animation": "idle"
+                "stop animation": {
+                    target: "idle",
+                    actions: "stopAnimation"
+                }
             },
 
-            entry: "startAnimation"
+            entry: ["setAnimating", "startAnimation"]
         }
     },
     context: {
@@ -87,7 +90,8 @@ const editorMachine = createMachine({
         camera: null,
         renderer: null,
         error: '',
-        objectsInScene: []
+        objectsInScene: [],
+        animating: true
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -120,15 +124,18 @@ const editorMachine = createMachine({
 
             return context;
         }),
+        setAnimating: assign((context, event) => {
+            return {
+                ...context,
+                animating: true
+            }
+        }),
         startAnimation: (context, event) => {
-            let animationIsPlaying = true;
-            document.getElementById('stop').addEventListener('click', () => {
-                animationIsPlaying = false;
-            });
-
             function animate() {
-                if (animationIsPlaying) {
+                if (context.animating) {
                     requestAnimationFrame(animate);
+                } else {
+                    return;
                 }
 
                 context.cube.rotation.x += 0.01;
@@ -138,6 +145,9 @@ const editorMachine = createMachine({
             }
 
             animate();
+        },
+        stopAnimation: (context, event) => {
+            context.animating = false;
         },
         createContextMenu: (context, event) => {
             const contextMenu = document.createElement('div');
