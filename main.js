@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createMachine } from 'xstate';
+import { createMachine, send } from 'xstate';
 import { interpret } from 'xstate/lib/interpreter';
 import { assign } from 'xstate/lib/actions';
 
@@ -106,20 +106,24 @@ const editorMachine = createMachine({
             }
         }),
         makeACube: assign((context, event) => {
-            const geometry = new THREE.BoxGeometry(1, 1, 1);
-            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-            const cube = new THREE.Mesh(geometry, material);
-            context.scene.add(cube);
+            if (!context.cube) {
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                const cube = new THREE.Mesh(geometry, material);
+                context.scene.add(cube);
 
-            return {
-                ...context,
-                cube: cube
+                return {
+                    ...context,
+                    cube: cube
+                }
             }
+
+            return context;
         }),
         startAnimation: (context, event) => {
             let animationIsPlaying = true;
             document.getElementById('stop').addEventListener('click', () => {
-                animationIsPlaying = !animationIsPlaying;
+                animationIsPlaying = false;
             });
 
             function animate() {
@@ -209,5 +213,9 @@ document.body.addEventListener('contextmenu', (event) => {
 document.body.addEventListener('click', (event) => {
     event.preventDefault();
     editorService.send('close context menu');
+});
+
+document.getElementById('stop').addEventListener('click', () => {
+    editorService.send('stop animation');
 });
 
