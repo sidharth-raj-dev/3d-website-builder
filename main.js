@@ -4,7 +4,7 @@ import { interpret } from 'xstate/lib/interpreter';
 import { assign } from 'xstate/lib/actions';
 
 const editorMachine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskAE9EAJgCsAdgoSAHAGYTWvXoAsR3UYBsAGhB9Et+xWsOjOgJwPfPxMAX2DnNCw8QhJyKloGWG5UACdBVFxsUlRlLkkZJBB5RRzcNVcEfQNfAEYrLV97e18JKytfZ00EK2qJCm7A+z0JPT8R+ytQ8IwcfGIySk4efkFhEQIWNkh6dBoFQkXeASE2cWk1IqUVUoLyrSNek2b7XQ7ER5MKGsbvn8aQsJAERm0XmFAOy2OonWrHwEDidHomXkqQIJggQkYEDANDy5wUl1UN0QHi01XsJh81WqNS0dyseleXWqRj6Jj0tOq9UC9S0k0B0yic1i4KOq2hmzh1ARWLovFR6NImOxuIKFxKZTcfWpOh6VJpdIZGjepIozPZpK5Oh5fKBgpilDwl1QNGwAC88FB6BAuA7cAA3RgAa19TpdrrAAFpYOhNiq5Pj1USECY2qaJL42TpGdVHhRdDaBbN7VQMspnW6PfQwMlkoxkhRmDRsgAzOukEuht2R6Oxs6qhNXDXJ1M9DMjRk1Tw6AuRIug9KZbKVxIsAgLrIlOOFAeE0DlR7VPN1bX3U96dpGirVHQUHVGKkSNl6Ew6IyhAG4JXwAq2ufkPHFIOSYRkYvieKY9i1EYZ56NejIRjevhIf4eg+JY3RaI8M7AkKDrxABBLXHuiA6GYFDuPe6YBEEjK6AYxhmBYXh2PY2F2qCIorCc4qwgRibEQgEbdOBJiQTYMFwZezIePYRjslaz5aMMj7-FMs4gsKXCHFxUIbLC8JgHxQECbm3Rkr4eiQfqPiMlavSyeanJIVaGZsX+IZlmGHpGbuLiIHUjL3rebkaZQ1a1skPlEX5FQUuBnJZpezRTiFuEUOuS64FAUVDvoYFkqRxjPjoOiNFYtkSB4DQSBI15kuy9jDBM75AA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBjAFgSwHZgAIA5VAWzADpsIAbMAYgHsAHMXA9R3AFzAA9uBcrgCuAbQAMAXUShmjWNm7YuskH0QAOAJwBGCgHYJBgMwBWE5oBME7QBYrmgDQgAnol2OKANlsTNmt5WJgZB5gC+4S5oWHiEJORUtAyw3KgAToKouNikqMpckjJIIPKKBbhqGgjeDhSaBlbatWZWdnYmwS7uCI769hZWBtpmunbDJpHRGDj4xGSUnDz8gsIiBCxskPToNAqES7wCQmzi0mplSiqVJdUmdmYU99pNjiYm2pr33YhW3o-tNpDMwOXRGOxTEAxWbxBYUQ4rE6iDasfAQJJ0ei5eSZAjZDYAIwAVmB0NwihcFFdVLdEABaWoSChmazeTQSd66CStbw-BAmCTeCgvMFmUb3RneSHQuLzRII45rFFbdHUTF5ADWhHxjGJpPJ5xKlwqVXpYqFXO8uneAR0YN5bkQditFAkzvZH1qbXZUqiUJmsoSiy4R1Wp2VaIomrwUHoEC4lDwADdGFqo6gtXTsnTdSSyRSjVSTbSEHShk9vdoOWCHo4xXy7Jo7Mz3UE7BJdPbNNKA3Mg-CQ4ilZtI9HcLGwOl0ox0hRmDR8gAzGekdOZ7O5-UFuRF66m0t-HwWbncuzW3wssx8sxGQzNBpmKtsxwQv0yvtwvBXVA0bAALxjOMEyoXAUzTL9lB-f8wDpWB0C2bdSl3GlQGqM9m0FdkHC+D4vjsPkuUMAwb18B8zA5RpdB7WIP0SCDsCggDx3oSdp1neclxXEDv1-P8YLghDDR3co9xLdDXTZN03lw75HVLEwhUaBwPk8dpmkcaiYTlShslyfJANSFg8RyPIKkQ41RNQp0zCFGx-G8BSHGMa0+UsAxXQ6BpPFaQIwUiP1cEYCA4DUd9YXISkRJQ9R6QMYiKEtVSHnbXR-j5OlrW0BKAlS9lNC5AwAk0wNP2SSLqRuKyEECR5tFMCQOTsexGm0Ew+TeCgmm8Xwmn8FkrWK2jg2WRVwxHSByuLKq6UadzEraZKOzSuSwSsChQTijsbNMD4DEG8LhtDJF1nG1UysLKLKpi0tvGGBLBSSkElqvOSHiy4ZbsfdlmgMM99u0gcRrDZFTrXGNJss666Ucp4GhCRp-hGSwG0fO9nzPKwuReV9phog7AaO4dUUgCh43wCHouqaHrXWqwxV0EZBQces5M6ExOvvawxXZTH-v7BVgZO4n0VYmcKauqmMc6sJQjFGw4qsPlan0LrNDFX7O2dHH-TxgH6MY8GLoq-dLWFfrbpwz4bXS51hV+4I9AW9TuzfXt8dF9Jxf3WX7uMIwxnaW10tGHwcsfDkvuCVK+bhXTTMN4TjZLWpm08Xb-m8EYmucVnCvWtW4t8BxQgefzwiAA */
     id: "Machine Name",
     initial: "initializing",
     states: {
@@ -17,7 +17,7 @@ const editorMachine = createMachine({
                 "start animation": "animating"
             },
 
-            entry: ["makeACube"]
+            entry: ["showEditorView"]
         },
 
         "context menu opened": {
@@ -26,18 +26,28 @@ const editorMachine = createMachine({
             states: {
                 idle: {
                     on: {
-                        "import 3d model": {
+                        "import an object": {
                             target: "idle",
-                            actions: "updateContext",
-                            internal: false,
+                            internal: false
                         },
-                        "delete 3d model": {
-                            target: "idle",
-                            actions: "updateContext",
-                            internal: false,
-                        },
+
+                        "make an object": "making"
                     },
                 },
+
+                making: {
+                    invoke: {
+                        src: "makeAnObject",
+                        id: "make-an-object",
+                        onDone: "done",
+                        onError: "error"
+                    }
+                },
+
+                done: {
+                    type: "final"
+                },
+                error: {}
             },
 
             on: {
@@ -130,6 +140,9 @@ const editorMachine = createMachine({
                 animating: true
             }
         }),
+        showEditorView: (context, event) => {
+            context.renderer.render(context.scene, context.camera);
+        },
         startAnimation: (context, event) => {
             function animate() {
                 if (context.animating) {
@@ -153,7 +166,7 @@ const editorMachine = createMachine({
             const contextMenu = document.createElement('div');
             contextMenu.id = 'context-menu';
             contextMenu.style.display = 'none';
-            contextMenu.innerHTML = "<button> Make a cube </button>";
+            contextMenu.innerHTML = `<button id="make-cube"> Make a cube </button>`;
             document.body.appendChild(contextMenu);
         },
         showContextMenu: (context, event) => {
@@ -182,6 +195,20 @@ const editorMachine = createMachine({
                 camera,
                 renderer
             };
+        },
+        makeAnObject: async (context, event) => {
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const cube = new THREE.Mesh(geometry, material);
+            context.scene.add(cube);
+
+            // render scene
+            context.renderer.render(context.scene, context.camera);
+
+            return {
+                ...context,
+                cube: cube
+            }
         }
     }
 });
@@ -191,7 +218,6 @@ let editorService;
 try {
     editorService = interpret(editorMachine).onTransition((state) => {
         console.log(state.value);
-        console.log(state.context);
     });
 } catch (error) {
     console.error('Error interpreting editor machine:', error);
@@ -227,5 +253,10 @@ document.body.addEventListener('click', (event) => {
 
 document.getElementById('stop').addEventListener('click', () => {
     editorService.send('stop animation');
+});
+
+document.getElementById('make-cube').addEventListener('click', () => {
+    console.log('clicked');
+    editorService.send('make an object');
 });
 
